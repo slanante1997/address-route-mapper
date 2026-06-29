@@ -21,9 +21,9 @@ export class AppComponent {
   protected readonly state = signal('');
   protected readonly zip = signal('');
 
-  // Upload is gated until city, state, and ZIP are all filled in.
+  // Upload is gated until at least a city or state is provided (ZIP is optional).
   protected readonly locationReady = computed(
-    () => !!this.city().trim() && !!this.state().trim() && !!this.zip().trim(),
+    () => !!this.city().trim() || !!this.state().trim(),
   );
 
   private nextId = 0;
@@ -55,13 +55,13 @@ export class AppComponent {
     if (!file) return;
 
     if (!this.locationReady()) {
-      this.status.set('Enter city, state, and ZIP code before uploading.');
+      this.status.set('Enter at least a city or state before uploading.');
       return;
     }
 
     this.previewUrl.set(URL.createObjectURL(file));
     this.busy.set(true);
-    this.status.set('Reading addresses with Gemini…');
+    this.status.set('Reading addresses…');
 
     try {
       const base64 = await this.fileToBase64(file);

@@ -7,28 +7,25 @@
 
     <section class="upload">
       <fieldset class="location">
-        <legend>Default location <span class="required">(required)</span></legend>
-        <p class="hint">Enter City, State, and ZIP before uploading an image.</p>
+        <legend>Location <span class="required">(City or State required)</span></legend>
+        <p class="hint">Enter at least a City or State before uploading. ZIP is optional.</p>
         <div class="location-fields">
           <input
             type="text"
             placeholder="City"
-            required
             [value]="city()"
             (input)="city.set($any($event.target).value)"
           />
           <input
             type="text"
             placeholder="State"
-            required
             [value]="state()"
             (input)="state.set($any($event.target).value)"
           />
           <input
             type="text"
             inputmode="numeric"
-            placeholder="ZIP code"
-            required
+            placeholder="ZIP code (optional)"
             [value]="zip()"
             (input)="zip.set($any($event.target).value)"
           />
