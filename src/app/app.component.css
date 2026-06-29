@@ -1,0 +1,82 @@
+.page {
+  max-width: 640px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  font-family: system-ui, sans-serif;
+  color: #1a1a2e;
+}
+header h1 { font-size: 1.5rem; margin-bottom: 0.25rem; }
+header p, .hint { color: #555; font-size: 0.9rem; }
+
+.location {
+  margin: 0 0 1rem;
+  padding: 0.75rem 0.9rem 0.9rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+.location legend { font-size: 0.9rem; font-weight: 600; padding: 0 0.4rem; }
+.location .optional { font-weight: 400; color: #888; }
+.location .hint { margin: 0 0 0.6rem; }
+.location-fields { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.location-fields input {
+  flex: 1;
+  min-width: 7rem;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+}
+.file-btn {
+  display: inline-block;
+  background: #2d4cdb;
+  color: #fff;
+  padding: 0.6rem 1.1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.status { margin-top: 0.75rem; }
+.status.busy { color: #2d4cdb; }
+
+.preview {
+  display: block;
+  max-width: 100%;
+  margin: 1rem 0;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.stops { margin-top: 1rem; }
+.row { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; }
+.row input {
+  flex: 1;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+.row button {
+  border: none;
+  background: #f1f1f4;
+  border-radius: 6px;
+  padding: 0 0.7rem;
+  cursor: pointer;
+}
+.add {
+  border: 1px dashed #aaa;
+  background: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #2d4cdb;
+}
+.open-maps {
+  display: inline-block;
+  margin-top: 1.25rem;
+  background: #137333;
+  color: #fff;
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+}

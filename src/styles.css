@@ -1,1 +1,63 @@
-/* You can add global styles to this file, and also import other style files */
+.page {
+  max-width: 640px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  font-family: system-ui, sans-serif;
+  color: #1a1a2e;
+}
+header h1 { font-size: 1.5rem; margin-bottom: 0.25rem; }
+header p, .hint { color: #555; font-size: 0.9rem; }
+
+.file-btn {
+  display: inline-block;
+  background: #2d4cdb;
+  color: #fff;
+  padding: 0.6rem 1.1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.status { margin-top: 0.75rem; display: flex; flex-direction: column; gap: 0.4rem; }
+progress { width: 100%; }
+
+.preview {
+  display: block;
+  max-width: 100%;
+  margin: 1rem 0;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.stops { margin-top: 1rem; }
+.row { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; }
+.row input {
+  flex: 1;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+.row button {
+  border: none;
+  background: #f1f1f4;
+  border-radius: 6px;
+  padding: 0 0.7rem;
+  cursor: pointer;
+}
+.add {
+  border: 1px dashed #aaa;
+  background: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #2d4cdb;
+}
+.open-maps {
+  display: inline-block;
+  margin-top: 1.25rem;
+  background: #137333;
+  color: #fff;
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+}
