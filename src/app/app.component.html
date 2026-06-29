@@ -1,76 +1,116 @@
-<main class="page">
-  <header>
-    <h1>Address Image → Google Maps Route</h1>
-    <p>Upload a photo of an address list. Gemini reads the addresses, lets you fix them,
-       then builds a Google Maps route from the stops.</p>
-  </header>
+<div class="layout">
+  <main class="page">
+    <header>
+      <h1>Address Image → Google Maps Route</h1>
+      <p>Upload a photo of an address list to build a Google Maps route from the stops.</p>
+    </header>
 
-  <section class="upload">
-    <fieldset class="location">
-      <legend>Default location <span class="optional">(optional)</span></legend>
-      <p class="hint">Fills in any address that's missing these. Leave blank to skip.</p>
-      <div class="location-fields">
-        <input
-          type="text"
-          placeholder="City"
-          [value]="city()"
-          (input)="city.set($any($event.target).value)"
-        />
-        <input
-          type="text"
-          placeholder="State"
-          [value]="state()"
-          (input)="state.set($any($event.target).value)"
-        />
-        <input
-          type="text"
-          inputmode="numeric"
-          placeholder="ZIP code"
-          [value]="zip()"
-          (input)="zip.set($any($event.target).value)"
-        />
-      </div>
-    </fieldset>
-
-    <label class="file-btn">
-      Choose image
-      <input type="file" accept="image/*" (change)="onFileSelected($event)" hidden />
-    </label>
-
-    @if (status()) {
-      <p class="status" [class.busy]="busy()">{{ status() }}</p>
-    }
-  </section>
-
-  @if (previewUrl()) {
-    <img class="preview" [src]="previewUrl()" alt="Uploaded address list" />
-  }
-
-  @if (stops().length) {
-    <section class="stops">
-      <h2>Stops</h2>
-      <p class="hint">First = start, last = destination, everything in between = waypoints.</p>
-
-      @for (stop of stops(); track stop.id) {
-        <div class="row">
+    <section class="upload">
+      <fieldset class="location">
+        <legend>Default location <span class="optional">(optional)</span></legend>
+        <p class="hint">Provide City, State, ZIP for more accurate results.</p>
+        <div class="location-fields">
           <input
             type="text"
-            [value]="stop.text"
-            (input)="updateStop(stop.id, $any($event.target).value)"
+            placeholder="City"
+            [value]="city()"
+            (input)="city.set($any($event.target).value)"
           />
-          <button type="button" (click)="removeStop(stop.id)">✕</button>
+          <input
+            type="text"
+            placeholder="State"
+            [value]="state()"
+            (input)="state.set($any($event.target).value)"
+          />
+          <input
+            type="text"
+            inputmode="numeric"
+            placeholder="ZIP code"
+            [value]="zip()"
+            (input)="zip.set($any($event.target).value)"
+          />
         </div>
-      }
+      </fieldset>
 
-      <button type="button" class="add" (click)="addStop()">+ Add stop</button>
+      <label class="file-btn">
+        Choose image
+        <input type="file" accept="image/*" (change)="onFileSelected($event)" hidden />
+      </label>
+
+      @if (status()) {
+        <p class="status" [class.busy]="busy()">{{ status() }}</p>
+      }
     </section>
 
-    @if (mapsUrl()) {
-      <a class="open-maps" [href]="mapsUrl()" target="_blank" rel="noopener">
-        Open route in Google Maps
-      </a>
-    } @else {
-      <p class="hint">Add at least two stops to build a route.</p>
+    @if (previewUrl()) {
+      <img class="preview" [src]="previewUrl()" alt="Uploaded address list" />
     }
-  }
-</main>
+
+    @if (stops().length) {
+      <section class="stops">
+        <h2>Stops</h2>
+        <p class="hint">First = start, last = destination, everything in between = waypoints.</p>
+
+        @for (stop of stops(); track stop.id) {
+          <div class="row">
+            <input
+              type="text"
+              [value]="stop.text"
+              (input)="updateStop(stop.id, $any($event.target).value)"
+            />
+            <button type="button" (click)="removeStop(stop.id)">✕</button>
+          </div>
+        }
+
+        <button type="button" class="add" (click)="addStop()">+ Add stop</button>
+      </section>
+
+      @if (mapsUrl()) {
+        <a class="open-maps" [href]="mapsUrl()" target="_blank" rel="noopener">
+          Open route in Google Maps
+        </a>
+      } @else {
+        <p class="hint">Add at least two stops to build a route.</p>
+      }
+    }
+  </main>
+
+  <aside class="info">
+    <section class="info-block">
+      <h2>About this project</h2>
+      <p>
+        Snap a photo of a handwritten or printed address list and turn it into a
+        ready-to-drive Google Maps route in seconds. A vision model reads the
+        addresses, you review and tidy the list, then open an optimized
+        multi-stop route in one tap.
+      </p>
+    </section>
+
+    <section class="info-block inspiration">
+      <h2>What inspired it</h2>
+      <p>
+        Built from my experience as a <strong>USPS package handler</strong>.
+        Planning a delivery run from a stack of addresses is slow and error-prone —
+        this tool removes the manual transcription and gets you on the road faster.
+      </p>
+    </section>
+
+    <section class="info-block">
+      <h2>Tech stack</h2>
+      <ul class="stack">
+        <li>
+          <span class="stack-name">Angular</span>
+          <span class="stack-desc">Standalone components &amp; signals for reactive UI state</span>
+        </li>
+        <li>
+          <span class="stack-name">Gemini API</span>
+          <span class="stack-desc">Vision call with structured JSON output to extract addresses</span>
+        </li>
+        <li>
+          <span class="stack-name">Google Maps</span>
+          <span class="stack-desc">Directions deep link builds the multi-stop route</span>
+        </li>
+      </ul>
+    </section>
+  </aside>
+</div>
