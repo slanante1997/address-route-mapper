@@ -7,18 +7,20 @@
 
     <section class="upload">
       <fieldset class="location">
-        <legend>Default location <span class="optional">(optional)</span></legend>
-        <p class="hint">Provide City, State, ZIP for more accurate results.</p>
+        <legend>Default location <span class="required">(required)</span></legend>
+        <p class="hint">Enter City, State, and ZIP before uploading an image.</p>
         <div class="location-fields">
           <input
             type="text"
             placeholder="City"
+            required
             [value]="city()"
             (input)="city.set($any($event.target).value)"
           />
           <input
             type="text"
             placeholder="State"
+            required
             [value]="state()"
             (input)="state.set($any($event.target).value)"
           />
@@ -26,15 +28,22 @@
             type="text"
             inputmode="numeric"
             placeholder="ZIP code"
+            required
             [value]="zip()"
             (input)="zip.set($any($event.target).value)"
           />
         </div>
       </fieldset>
 
-      <label class="file-btn">
+      <label class="file-btn" [class.disabled]="!locationReady()">
         Choose image
-        <input type="file" accept="image/*" (change)="onFileSelected($event)" hidden />
+        <input
+          type="file"
+          accept="image/*"
+          [disabled]="!locationReady()"
+          (change)="onFileSelected($event)"
+          hidden
+        />
       </label>
 
       @if (status()) {

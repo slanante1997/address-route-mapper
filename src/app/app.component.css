@@ -63,7 +63,7 @@ header p, .hint { color: #555; font-size: 0.9rem; }
   border-radius: 8px;
 }
 .location legend { font-size: 0.9rem; font-weight: 600; padding: 0 0.4rem; }
-.location .optional { font-weight: 400; color: #888; }
+.location .required { font-weight: 400; color: #c0392b; }
 .location .hint { margin: 0 0 0.6rem; }
 .location-fields { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 .location-fields input {
@@ -83,6 +83,10 @@ header p, .hint { color: #555; font-size: 0.9rem; }
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
+}
+.file-btn.disabled {
+  background: #b8bdcf;
+  cursor: not-allowed;
 }
 .status { margin-top: 0.75rem; }
 .status.busy { color: #2d4cdb; }

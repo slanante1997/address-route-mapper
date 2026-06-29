@@ -1,14 +1,9 @@
 import { Component, signal, computed } from '@angular/core';
-import { GEMINI_API_KEY } from './gemini-key';
 
 interface Stop {
   id: number;
   text: string;
 }
-
-const GEMINI_MODEL = 'gemini-2.5-flash';
-const GEMINI_ENDPOINT =
-  `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
 @Component({
   selector: 'app-root',
@@ -21,10 +16,15 @@ export class AppComponent {
   protected readonly status = signal('');
   protected readonly busy = signal(false);
   protected readonly previewUrl = signal<string | null>(null);
-  // Optional defaults applied to any extracted address that's missing them.
+  // Required defaults applied to any extracted address that's missing them.
   protected readonly city = signal('');
   protected readonly state = signal('');
   protected readonly zip = signal('');
+
+  // Upload is gated until city, state, and ZIP are all filled in.
+  protected readonly locationReady = computed(
+    () => !!this.city().trim() && !!this.state().trim() && !!this.zip().trim(),
+  );
 
   private nextId = 0;
 
@@ -54,8 +54,8 @@ export class AppComponent {
     const file = input.files?.[0];
     if (!file) return;
 
-    if (!GEMINI_API_KEY) {
-      this.status.set('No Gemini API key configured in gemini-key.ts.');
+    if (!this.locationReady()) {
+      this.status.set('Enter city, state, and ZIP code before uploading.');
       return;
     }
 
@@ -95,64 +95,29 @@ export class AppComponent {
     });
   }
 
-  // Builds an instruction telling Gemini to fill in any missing city/state/ZIP.
-  private locationHint(): string {
-    const parts = [
-      this.city().trim() && `city "${this.city().trim()}"`,
-      this.state().trim() && `state "${this.state().trim()}"`,
-      this.zip().trim() && `ZIP code "${this.zip().trim()}"`,
-    ].filter(Boolean);
-
-    if (!parts.length) return '';
-    return (
-      ' If an address is missing the city, state, or ZIP code, complete it using ' +
-      parts.join(', ') +
-      '. Do not override values already present in the image.'
-    );
-  }
-
-  // Sends the image to Gemini and asks for a JSON array of address strings.
+  // Sends the image to our serverless proxy, which calls Gemini with the secret key.
   private async extractAddresses(base64: string, mimeType: string): Promise<string[]> {
-    const body = {
-      contents: [
-        {
-          parts: [
-            {
-              text:
-                'Extract every mailing/street address visible in this image. ' +
-                'Return them in the order they appear, one entry per stop, each on a single line. ' +
-                'Ignore non-address text such as headers, names, phone numbers, or notes.' +
-                this.locationHint(),
-            },
-            { inline_data: { mime_type: mimeType || 'image/jpeg', data: base64 } },
-          ],
-        },
-      ],
-      generationConfig: {
-        responseMimeType: 'application/json',
-        responseSchema: {
-          type: 'ARRAY',
-          items: { type: 'STRING' },
-        },
-      },
-    };
-
-    const res = await fetch(`${GEMINI_ENDPOINT}?key=${encodeURIComponent(GEMINI_API_KEY)}`, {
+    const res = await fetch('/api/extract', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
+      body: JSON.stringify({
+        base64,
+        mimeType,
+        city: this.city().trim(),
+        state: this.state().trim(),
+        zip: this.zip().trim(),
+      }),
     });
 
+    const data = await res.json().catch(() => ({}));
+
     if (!res.ok) {
-      const detail = await res.text();
-      throw new Error(`Gemini request failed (${res.status}). ${detail.slice(0, 200)}`);
+      throw new Error(data?.error ?? `Address extraction failed (${res.status}).`);
     }
 
-    const data = await res.json();
-    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? '[]';
-    const parsed = JSON.parse(text);
-    return Array.isArray(parsed)
-      ? parsed.map((s: unknown) => String(s).trim()).filter(Boolean)
+    const addresses = data?.addresses;
+    return Array.isArray(addresses)
+      ? addresses.map((s: unknown) => String(s).trim()).filter(Boolean)
       : [];
   }
 

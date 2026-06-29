@@ -41,5 +41,6 @@ testem.log
 .DS_Store
 Thumbs.db
 
-# Local secrets (keep the .example template tracked)
-/src/app/gemini-key.ts
+# Local secrets — the Gemini key lives here for `netlify dev`; production uses
+# the Netlify dashboard env var. Never commit this file.
+.env

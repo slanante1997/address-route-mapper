@@ -1,0 +1,13 @@
+[build]
+  command = "npm run build"
+  publish = "dist/address-route-mapper/browser"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# SPA fallback: serve index.html for client-side routes.
+# The /api/extract function route is matched first, so it isn't affected.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
