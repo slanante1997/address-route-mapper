@@ -10,20 +10,14 @@ describe('AppComponent', () => {
 
   it('should create the app', () => {
     const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+    expect(fixture.componentInstance).toBeTruthy();
   });
 
-  it(`should have the 'address-route-mapper' title`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('address-route-mapper');
-  });
-
-  it('should render title', () => {
+  it('renders the route builder and info panel', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, address-route-mapper');
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.querySelector('app-route-builder')).toBeTruthy();
+    expect(el.querySelector('app-info-panel')).toBeTruthy();
   });
 });

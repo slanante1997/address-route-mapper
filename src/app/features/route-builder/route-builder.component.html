@@ -1,0 +1,81 @@
+<main class="page">
+  <header>
+    <h1>Address Image → Google Maps Route</h1>
+    <p>Upload a photo of an address list to build a Google Maps route from the stops.</p>
+  </header>
+
+  <section class="upload">
+    <fieldset class="location">
+      <legend>Location <span class="required">(City or State required)</span></legend>
+      <p class="hint">Enter at least a City or State before uploading. ZIP is optional.</p>
+      <div class="location-fields">
+        <input
+          type="text"
+          placeholder="City"
+          [value]="city()"
+          (input)="city.set($any($event.target).value)"
+        />
+        <input
+          type="text"
+          placeholder="State"
+          [value]="state()"
+          (input)="state.set($any($event.target).value)"
+        />
+        <input
+          type="text"
+          inputmode="numeric"
+          placeholder="ZIP code (optional)"
+          [value]="zip()"
+          (input)="zip.set($any($event.target).value)"
+        />
+      </div>
+    </fieldset>
+
+    <label class="file-btn" [class.disabled]="!locationReady()">
+      Choose image
+      <input
+        type="file"
+        accept="image/*"
+        [disabled]="!locationReady()"
+        (change)="onFileSelected($event)"
+        hidden
+      />
+    </label>
+
+    @if (status()) {
+      <p class="status" [class.busy]="busy()">{{ status() }}</p>
+    }
+  </section>
+
+  @if (previewUrl()) {
+    <img class="preview" [src]="previewUrl()" alt="Uploaded address list" />
+  }
+
+  @if (stops().length) {
+    <section class="stops">
+      <h2>Stops</h2>
+      <p class="hint">First = start, last = destination, everything in between = waypoints.</p>
+
+      @for (stop of stops(); track stop.id) {
+        <div class="row">
+          <input
+            type="text"
+            [value]="stop.text"
+            (input)="updateStop(stop.id, $any($event.target).value)"
+          />
+          <button type="button" (click)="removeStop(stop.id)">✕</button>
+        </div>
+      }
+
+      <button type="button" class="add" (click)="addStop()">+ Add stop</button>
+    </section>
+
+    @if (mapsUrl()) {
+      <a class="open-maps" [href]="mapsUrl()" target="_blank" rel="noopener">
+        Open route in Google Maps
+      </a>
+    } @else {
+      <p class="hint">Add at least two stops to build a route.</p>
+    }
+  }
+</main>
